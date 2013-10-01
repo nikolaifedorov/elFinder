@@ -46,7 +46,10 @@ window.elFinderSupportVer1 = function(upload) {
 			xhr;
 			
 		dfrd.abort = function() {
-			xhr.state() == 'pending' && xhr.abort();
+			if (xhr.state() == 'pending') {
+				xhr.quiet = true;
+				xhr.abort();
+			}
 		}
 		
 		switch (cmd) {
@@ -114,7 +117,7 @@ window.elFinderSupportVer1 = function(upload) {
 		
 		xhr = $.ajax(opts)
 			.fail(function(error) {
-				dfrd.reject(error)
+				dfrd.reject(error, error['statusText']);
 			})
 			.done(function(raw) {
 				data = self.normalize(cmd, raw);
